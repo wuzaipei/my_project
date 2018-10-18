@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>多人聊天系统</title>
+		<script type="text/javascript" src="js/socket.io.js"></script>
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/my_server_android.css"/>
+		
+	</head>
+	<body>
+		<div id="app">
+			<div class="userAttr" v-for="info in clientDict" @click="infoEdit(info.name,info.sid)" v-if="info.sid==sid">
+				<div class="img">
+					<img :src="info.imgUrl"/>
+				</div>
+				<div>
+					<div class="userName">userName：{{info.name}}</div>
+					<div class="userID">userSignature：{{info.signature}}</div>
+				</div>
+				<div class="qun" @click="addqun">
+					添加群
+				</div>
+			</div>
+			
+			<div class="edit" v-show="isShow">
+				<div class="sty">
+					<div class="editName">
+						修改姓名：<input type="text" v-model="editname" name="" id="" value="" />
+					</div>
+				    <div class="editID">
+				    	修改头像：<input type="text" v-model="editImg" name="" id="" value="" />
+				    </div>
+				    <div class="editSig">
+				    	修改签名：<input type="text" v-model="editSig" name="" id="" value="" />
+				    </div>
+				    <div id="realy">
+				    	<button @click="realys(sid)">确定修改</button>
+				    </div>
+				</div>
+			</div>
+			
+			<hr />
+			<hr />
+			<div id="main">
+				<!--在线好友，群列表。-->
+				<div id="ttt">
+					<div class="headerItem" v-for="item in clientDict" @click="choose(item.sid,item.isRoom,item.name,item.imgUrl,item)" v-if="item.sid !=sid">
+						<div class="headerImg1">
+							<img :src="item.imgUrl"/>
+						</div>
+						<div :id="item.sid" class="sidName">
+							<div class="top">{{item.name}}</div>
+							<div>{{item.signature}}</div>
+							
+						</div>
+					</div>
+				</div>
+				<!--聊天列表信息-->
+				
+				<div class="speakInfo" v-show="speakBool">
+					<!--显示谁和谁在聊天-->
+						<div class="chatDest">
+							<div class="left_1" @click="goBack">返回</div>
+							<div class="right_1">本机：与用户：{{hostName}} 聊天中</div>
+						</div>
+					<!--# 聊天内容-->
+					<div class="text">
+						<div class="tit2" v-for="x in chatList">
+							<div class="right"  v-if="x.srcId!=sid">
+								<div class="chat img"><img :src="x.srcimg"/></div>
+								<div class="chatLeft">
+									<div>{{x.srcname}}</div>
+									<div>{{x.content}}</div>
+								</div>
+							</div>
+							
+							<div class="chat"  v-if="x.srcId==sid">
+								<div class="chatRgit">
+									<div>{{x.srcname}}</div>
+									<div>{{x.content}}</div>
+								</div>
+								<div class="chat right"><img :src="x.srcimg"/></div>
+							</div>
+						</div>
+					</div>
+					<!--输入框-->
+					<div class="inputs">
+						<div class="left">
+							<input type="text" v-model="inputText"  @keyup.enter="clickEt" name="inputEvent" id="inputEvent" value="" />
+						</div>
+						<div class="right">
+							
+							<button @click='sendChat'>发送</button>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<!--<canvas id="c_n9" width="1920" height="990" style="position: fixed; top: 0px; left: 0px; z-index: -1; opacity: 0.5;"></canvas>
+			<script src="https://files.cnblogs.com/files/jingmoxukong/canvas-nest.min.js"></script>-->
+		</div>
+		
+		<script type="text/javascript">
+			
+			
+//			
+//			function loadCSS() {
+//				if((navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|wOSBrowser|BrowserNG|WebOS)/i))) {
+//					document.write('<link rel="stylesheet" type="text/css" href="css/my_server_android.css"/>');
+//				}
+//				else {
+//					document.write('<link rel="stylesheet" type="text/css" href="css/my_server_pc.css"/>');
+//				}
+//			}
+//			loadCSS();
+			
+			var socket = io('http://192.168.8.181:8080') //http://22i360k555.51mypc.cn
+			var app = new Vue({
+				el:'#app',
+				data:{
+					clientDict:{},
+					sid:'',
+					chatList:[],
+					destId:'', //标识聊天对象
+					isRoom:false, //标识是否在群聊。
+					inputText:'',//发送的内容
+					hostName:'',
+					isShow:false,
+					editname:'',
+					editImg:'',
+//					imgUrl:'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1539518159057&di=7f3f846456ba019ea06f30f09f4b7505&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20161027%2F9769626c447642c48dd4f9600e54a6ee_th.jpeg',
+					editSig:'',
+					image:'',
+					speakBool:false,
+					history:[],
+					nums:{},
+
+				},
+				methods:{
+					goBack:function(){
+						this.speakBool=false
+						$('#'+app.destId+'>div.news').remove()
+						app.nums[app.destId]=0
+					},
+					choose:function(sid,isRoom,name,imgUrl,item){	
+						
+						
+						console.log(app.nums[sid])
+						$('#'+sid+'>div.news').remove()
+						app.nums[sid]=0
+						
+//						console.log(this.history)
+						
+						this.speakBool=true
+						if(this.isRoom ){
+							socket.emit('leaveRoom',{'room':this.destId})
+						}
+						this.destId = sid
+						this.hostName = name
+						this.image = imgUrl
+						
+						this.chatList=[]
+						for(var i =0;i<this.history.length;i++){
+							var a = this.history[i].content
+							if (this.history[i].destId==sid && item.isRoom){
+								this.chatList.push(this.history[i])
+							}
+							else if(item.isRoom==false && a.substring(a.length-2,a.length)!= '房间'){
+								if((this.history[i].destId==item.sid && this.history[i].srcId==this.sid) || (this.history[i].destId==this.sid && this.history[i].srcId==item.sid)  ){
+									this.chatList.push(this.history[i])
+								}
+							}
+						}
+						
+						
+						//console.log('记录',this.chatList)
+//						console.log('获取聊天对象成功',this.destId)
+						if(isRoom){
+							socket.emit('enterRoom',{'room':sid})
+							this.isRoom = true
+						}
+					},
+					//聊天信息的发送
+					sendChat:function(sid){
+						console.log('发送聊天信息：',sid)
+						socket.emit('sendMsg',{'content':this.inputText,'destId':this.destId,'srcId':this.sid,'name':this.hostName,'imgUrl':this.image})
+						this.inputText=''
+					},
+					//回车发送信息内容
+					clickEt:function(){
+						socket.emit('sendMsg',{'content':this.inputText,'destId':this.destId,'srcId':this.sid,'name':this.hostName,'imgUrl':this.image})
+						this.inputText=''
+					},
+					infoEdit:function(name,sid){
+						this.isShow = true
+						this.editSig=''
+						this.editname=''
+						this.editImg=''
+					},
+					realys:function(sid){
+						this.isShow = false
+						if (this.editname.length!=0 || this.editImg.length!=0 || this.editSig.length!=0){
+							socket.emit('editText',{'sid':sid,'name':this.editname,'imgUrl':this.editImg,'sig':this.editSig}) //'ID':this.editID,
+						}
+//						if (this.editImg.length!=0){
+//							socket.emit('editText',{'sid':sid,'imgUrl':this.editImg})
+//						}
+//						if (this.editSig.length!=0){
+//							socket.emit('editText',{'sid':sid,'sig':this.editSig})
+//						}
+						this.editSig=''
+						this.editname=''
+						this.editImg=''
+				},
+					addqun:function(){
+						socket.emit('createRoom',{'room':'newRoom'})
+					}
+					
+				}
+					
+			})
+			// 事件监听。使用jQuery进行调用监听事件。
+//			$('#inputEvent').keydown(function(event){
+//			　　　　if(event.keyCode == 13){
+//			　　　　　 socket.emit('sendMsg',{'content':app.inputText,'destId':app.destId,'srcId':app.sid})
+//					 app.inputText=''
+//			　　　　}
+//			});
+			
+			socket.on('connect',function(){
+				console.log('连接成功')
+			})
+			
+			
+			
+			socket.on('updateDict', function(content){
+				app.clientDict=content
+//				console.log('数据库内容1',app.clientDict)
+				for(var i in content){
+					app.nums[i]=0
+				}
+				
+				
+			});
+			socket.on('emiteID',function(sid){
+				app.sid = sid
+//				console.log(app.sid)
+			})
+			//获取聊天信息
+			socket.on('reply',function(data){
+//				data['message']=false
+				//信息接收
+				if (data.isRoom && data.srcId != app.sid && data.destId != app.sid){
+					app.nums[data.destId] +=1 
+//					data['message']=true
+//					data['numMsg'] = app.nums
+					//<div class="news" v-show="item.message">{{item.nums}}</div>
+					$('#'+data.destId+'>div.news').remove()
+					var divNew = document.createElement('div')
+					divNew.className = 'news'
+					divNew.innerHTML=app.nums[data.destId]
+					$('#'+data.destId).append(divNew)
+					
+					
+					
+				}else if(data.isRoom==false && data.destId==app.sid && data.srcId != app.sid){
+					app.nums[data.srcId] += 1
+//					data['message']=true
+//					data['numMsg'] = app.nums
+					$('#'+data.srcId+'>div.news').remove()
+					var divNew = document.createElement('div')
+					divNew.className = 'news'
+					divNew.innerHTML=app.nums[data.srcId]
+					$('#'+data.srcId).append(divNew)
+				}
+				console.log(app.nums)
+				
+				
+				
+				if (data['destId'] == app.destId || data['srcId'] == app.destId || data['destId']==app.sid || data['srcId']==app.sid){
+									
+									a = data.content 
+									if (a.substring(a.length-2,a.length) != '房间'){
+										app.chatList.push(data)
+									}
+									
+									app.history.push(data)
+									console.log('聊天',data)
+									
+								}
+			})
+			
+			socket.on('disconnect', function(){
+				
+			})
+			
+			socket.on('updateText',function(content){
+				console.log('数据库内容2',content)
+				app.clientDict=content
+				
+//				console.log(app.clientDict)
+			})
+			
+		</script>
+
+	</body>
+</html>
+

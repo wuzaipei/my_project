@@ -1,0 +1,155 @@
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+.userAttr {
+	height: 100px;
+	width: auto;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	background: skyblue;
+}
+
+.userAttr div img {
+	width: 80px;
+	height: 80px;
+}
+
+.userAttr div {
+	font-size: 20px;
+}
+
+.edit {
+	position: absolute;
+	width: 100%;
+	height: 90%;
+	background: lightgray;
+	opacity: 0.9;
+}
+
+.sty {
+	width: 500px;
+	height: 300px;
+	background: #fbfbfb;
+	margin: 20% auto;
+	opacity: 1 !important;
+	line-height: 120px;
+}
+
+.sty div {
+	width: auto;
+	height: 80px;
+	text-align: center;
+	font-size: 20px;
+}
+
+.sty div button {
+	font-size: 25px;
+}
+
+#main {
+	display: flex;
+	width: auto;
+	height: 800px;
+	justify-content: initial;
+}
+
+#ttt {
+	width: 200px;
+	height: 700;
+	overflow: scroll;
+}
+
+.headerItem {
+	/*text-align: center;*/
+	background: #DDDDDD;
+}
+
+.headerImg {
+	width: 100px;
+	height: 100px;
+	margin: 0px auto 10px auto;
+}
+
+.headerImg img {
+	width: 100px;
+	height: 100px;
+}
+
+.sidName {
+	margin: 0 auto;
+	text-align: center;
+	width: 100px;
+	height: 50px;
+	/*line-height: 50px;*/
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.speakInfo {
+	flex: 1;
+}
+
+.chatDest {
+	width: 100%;
+	height: 50px;
+	background: #D3D3D3;
+	text-align: center;
+	line-height: 50px;
+	font-size: 20px;
+	overflow: hidden;
+}
+
+.chat {
+	margin-top: 5px;
+	width: auto;
+	height: 50px;
+	line-height: 50px;
+}
+
+.chat img {
+	width: 50px;
+	height: 50px;
+}
+
+.chat.right {
+	text-align: right;
+}
+
+.text {
+	height: 650px;
+	background: #FFF8DC;
+	border: 1px solid red;
+	overflow: scroll;
+}
+
+.inputs {
+	display: flex;
+	justify-content: initial;
+	width: auto;
+	height: 100px;
+	/*border: 1px solid red;*/
+}
+
+.inputs .left {
+	flex: 0.8;
+}
+
+.inputs .right {
+	flex: 0.2;
+}
+
+.inputs .left input {
+	width: 100%;
+	height: 94px;
+	font-size: 20px;
+}
+
+.inputs button {
+	width: 100%;
+	height: 100px;
+	text-align: center;
+	font-size: 30px;
+}

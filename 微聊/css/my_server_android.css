@@ -1,0 +1,238 @@
+* {
+	padding: 0px;
+	margin: 0px;
+}
+.qun{
+    width: 110px;
+    height: 110px;
+    text-align: center;
+    line-height: 110px;
+    background: honeydew;
+}
+
+.userAttr {
+	height: 150px;
+	width: auto;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	background: skyblue;
+}
+
+.userAttr div img {
+	width: 100px;
+	height: 100px;
+}
+
+.userAttr div {
+	font-size: 35px;
+}
+
+.edit {
+	position: absolute;
+	width: 100%;
+	height: 90%;
+	background: lightgray;
+	opacity: 0.9;
+    z-index: 1;
+}
+
+#realy{
+    text-align: right;
+    margin-right: 60px;
+}
+
+.sty {
+    width: 700px;
+    height: 555px;
+	background: #fbfbfb;
+	margin: 20% auto;
+	opacity: 1 !important;
+	line-height: 200px;
+}
+
+.sty div {
+	margin-top: 45px;
+	width: auto;
+	height: 80px;
+	text-align: center;
+	font-size: 40px;
+}
+
+.sty div button {
+	font-size: 50px;
+}
+.sty div input{
+	width: 300px;
+	height: 50px;
+	font-size: 40px;
+}
+#main {
+	/*display: flex;*/
+	width: auto;
+	height: 100%;
+	/*justify-content: initial;*/
+}
+
+#ttt {
+	
+	width: auto;
+	height:1580px;
+	overflow: scroll;
+}
+
+.headerItem {
+	position: relative;
+	width:100%;
+	height:150px;
+	display: flex;
+	justify-content:flex-start;
+	align-items: center;
+	/*height: 120px;*/
+	/*text-align: center;*/
+	background: #DDDDDD;
+	margin-top: 5px;
+}
+.news{
+	width: 50px;
+    height: 50px;
+    position: absolute;
+    background: red;
+    top: 0px;
+    left: 120px;
+    color: white;
+    text-align: center;
+    line-height: 50px;
+    font-size: 40px;
+    border-radius: 50px;
+	
+}
+
+.headerImg {
+	width: 120px;
+	height: 120px;
+	margin: 0px auto 10px auto;
+}
+
+.headerImg1 img {
+	width: 120px;
+	height: 120px;
+	margin-left: 50px;
+}
+
+.sidName {
+	text-align:left;
+	width: auto;
+	height: 150px;
+	font-size: 30px;
+	/*line-height: 50px;*/
+	overflow:hidden;
+	margin-left: 50px;
+}
+.sidName .top{
+    margin-top: 35px;
+}
+
+.speakInfo {
+	width: 100%;
+	height: auto;
+	position: absolute;
+	top: 0px;
+	left: 0ox;
+}
+
+.chatDest {
+	width: 100%;
+	height:120px;
+	background: #D3D3D3;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	
+	font-size: 24px;
+	overflow: hidden;
+}
+
+.chatDest .left_1{
+	width: 120px;
+	height: 120px;
+	text-align: center;
+	line-height: 120px;
+	font-size: 30px;
+	background:burlywood;
+}
+.chatDest .right_1{
+	flex: 1;
+	text-align: center;
+	
+}
+
+.chat {
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+.chatRgit div{
+	text-align: right;
+}
+.chatLeft div{
+	text-align: left;
+}
+.chat img {
+	width: 90px;
+	height: 90px;
+}
+.right{
+	margin-top: 10px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+/*.chat.right {
+	text-align: right;
+}*/
+
+.text {
+	height: 1508px;
+	background: #FFF8DC;
+	border: 1px solid red;
+	overflow: scroll;
+}
+.text div{
+	font-size: 25px;
+}
+.text .tit2{
+	
+	
+}
+
+
+.inputs {
+	display: flex;
+	justify-content: initial;
+	width: auto;
+	height: 100px;
+	border: 1px solid red;
+}
+
+.inputs .left {
+	flex: 0.8;
+}
+
+.inputs .right {
+	flex: 0.2;
+}
+
+.inputs .left input {
+	width: 100%;
+	height: 94px;
+	font-size: 30px;
+}
+
+.inputs button {
+	width: 100%;
+	height: 100px;
+	text-align: center;
+	font-size: 30px;
+}
